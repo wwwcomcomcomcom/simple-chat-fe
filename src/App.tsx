@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import {DivProps, getName, isLogin} from "./utils/utils.ts";
 import ChatHeader from './components/chatting/ChatHeader.tsx';
+import ChattingInput from './components/chatting/ChattingInput.tsx';
 
 interface Chatting {
   name: string;
@@ -16,9 +17,11 @@ interface AppState {
 class App extends React.Component<DivProps,AppState> {
   
   socket: WebSocket;
+  name: string;
 
   constructor(props: DivProps) {
     super(props);
+    this.name = getName();
     this.state = {
       chattings: []
     };
@@ -46,10 +49,11 @@ class App extends React.Component<DivProps,AppState> {
 
 
     return <div>
-      <ChatHeader name={getName()}/>
+      <ChatHeader name={this.name}/>
       {this.state.chattings.map((chatting,index) => {
         return <div key={index.toString()}>{chatting.name}: {chatting.message}</div>
       })}
+      <ChattingInput name={this.name} socket={this.socket}/>
     </div>
   }
 }
