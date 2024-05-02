@@ -22,10 +22,10 @@ class App extends React.Component<DivProps,AppState> {
     this.state = {
       chattings: []
     };
-    this.socket = new WebSocket('ws://localhost:3000/ws');
+    this.socket = new WebSocket('ws://localhost:3001/ws');
     this.socket.onmessage = (event) => {
       console.log(event.data);
-      this.setState({chattings: [...this.state.chattings,event.data]});
+      this.setState({chattings: [...this.state.chattings,...JSON.parse(event.data)]});
     };
   }
 
@@ -47,8 +47,8 @@ class App extends React.Component<DivProps,AppState> {
 
     return <div>
       <ChatHeader name={getName()}/>
-      {this.state.chattings.map((chatting) => {
-        return <div>{chatting.name}: {chatting.message}</div>
+      {this.state.chattings.map((chatting,index) => {
+        return <div key={index.toString()}>{chatting.name}: {chatting.message}</div>
       })}
     </div>
   }
