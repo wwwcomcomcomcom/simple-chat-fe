@@ -1,16 +1,32 @@
 import './App.css'
 import React from "react";
 import axios from "axios";
-import {DivProps} from "./utils.ts";
+import {DivProps, getName, isLogin} from "./utils/utils.ts";
+import ChatHeader from './components/chatting/ChatHeader.tsx';
+
+interface Chatting {
+  name: string;
+  message: string;
+}
 
 interface AppState {
-  data: string;
+  chattings: Chatting[];
 }
 
 class App extends React.Component<DivProps,AppState> {
+  
+  socket: WebSocket;
+
   constructor(props: DivProps) {
     super(props);
-    this.state = {data: 'Loading...'};
+    this.state = {
+      chattings: []
+    };
+    this.socket = new WebSocket('ws://localhost:3000/ws');
+    this.socket.onmessage = (event) => {
+      console.log(event.data);
+      this.setState({chattings: [...this.state.chattings,event.data]});
+    };
   }
 
   getData = async () => {
@@ -19,14 +35,21 @@ class App extends React.Component<DivProps,AppState> {
   };
 
   componentDidMount() {
-    this.getData().then(data => {
-      this.setState({data: data.toString()});
-    });
+    
   }
 
   render() {
+
+    if (!isLogin()) {
+      window.location.href = '/login';
+    }
+
+
     return <div>
-      data from backend {this.state.data}
+      <ChatHeader name={getName()}/>
+      {this.state.chattings.map((chatting) => {
+        return <div>{chatting.name}: {chatting.message}</div>
+      })}
     </div>
   }
 }
