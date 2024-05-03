@@ -28,14 +28,21 @@ class ChattingInput extends React.Component<ChattingInputProps,ChattingInputStat
     this.setState({ message: "" });
   };
 
+  submitWithEnter = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      this.sendMessage();
+    }
+  };
+
   render() {
     return (
-      <div className="flex justify-center space-x-5">
+      <div className="flex justify-center space-x-5 w-full h-12">
         <input
           className="border border-gray-300 rounded-md w-1/2 p-2"
           type="text"
           value={this.state.message}
           onChange={(e) => this.setState({ message: e.target.value })}
+          onKeyDown={this.submitWithEnter}
         />
         <button
           onClick={this.sendMessage}
