@@ -47,8 +47,8 @@ class App extends React.Component<DivProps, AppState> {
 
     return (
       <div>
-        <ChatHeader name={this.name} />
-        <main className="container mx-auto">
+        <ChatHeader name={this.name}/>
+        <main className="container mx-auto h-[80vh] overflow-y-scroll" style={{"scrollbarWidth":"none"}}>
           {this.state.chattings.map((chatting, index) => {
 
             const color = this.name === chatting.name ? "bg-green-400" : "bg-cyan-300";
@@ -62,7 +62,7 @@ class App extends React.Component<DivProps, AppState> {
             );
           })}
         </main>
-        <ChattingInput name={this.name} socket={this.socket} />
+        <ChattingInput name={this.name} socket={this.socket}/>
       </div>
     );
   }
